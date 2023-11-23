@@ -84,3 +84,60 @@ const items = [
     img: "./img/12.jpeg",
   },
 ];
+
+let filter = [...items];
+
+const div = document.querySelector("#shop-items");
+const template = document.querySelector("#item-template");
+
+function createNewCard(i) {
+  const {title, description, tags, price, img} = i;
+  const newCard = template.content.cloneNode(true);
+  newCard.querySelector("h1").textContent = title;
+  newCard.querySelector("p").textContent = description;
+  newCard.querySelector("img").src= img;
+  newCard.querySelector("span").textContent = price;
+  
+  tags.forEach ((tag) => {
+    const t = document.createElement("span")
+    t.classList.add('tag')
+    t.textContent = tag
+    newCard.querySelector(".tags").append(t)
+  });
+
+  div.append(newCard);
+
+  //return item;
+}
+
+for (let item of items) {
+  createNewCard(item) 
+  
+}
+
+///***** 
+const button = document.querySelector('#search-btn');
+const titleSearch = document.querySelector('#search-input');
+
+function search() {
+  const text = titleSearch.value.trim().toLowerCase();
+  filter = items.filter((item) => 
+    item.title.toLowerCase().includes(text)
+  )
+}
+
+const nothingFound = document.querySelector("#nothing-found");
+
+function doNewCards (arr) {
+  nothingFound.textContent = "";
+  div.innerHTML = "";
+  arr.forEach((i) => {
+    div.append(createNewCard(i));
+  });
+  if (!arr.length) {
+    nothingFound.textContent = "Ничего не найдено";
+  }
+}
+
+
+button.addEventListener('click', doNewCards);
